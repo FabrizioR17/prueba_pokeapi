@@ -89,7 +89,7 @@ def pokemon_list(request):
         
     return JsonResponse(response)
 
-def pokedexs_list(request):
+def pokedex_list(request):
     client = MongoClient('mongodb://localhost:27017/')
     db = client['pokeapi_co_db']
     collection = db['pokemon_v2_pokedex']
@@ -113,7 +113,7 @@ def pokedexs_list(request):
         # Si la página está fuera del rango, muestra la última página
         pokedexs = paginator.page(paginator.num_pages)
 
-    pokemons_list = list(pokedexs)
+    pokedex_list = list(pokedexs)
 
     response = {
         
@@ -121,7 +121,7 @@ def pokedexs_list(request):
         'next_page': None,
         'first_page': None,
         'last_page': None,
-        'pokedexs': pokedexs_list,
+        'pokedexs': pokedex_list,
     }
 
     if pokedexs.has_previous():
