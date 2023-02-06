@@ -42,6 +42,11 @@ from pymongo import MongoClient
 from django.http import JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+from django.contrib.auth.models import User
+from rest_framework import generics, permissions
+from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+
 def pokemon_list(request):
     client = MongoClient('mongodb://localhost:27017/')
     db = client['pokeapi_co_db']
@@ -173,3 +178,6 @@ def pokedex_by_id_name(request, pokedex_identifier):
         if isinstance(value, ObjectId):
             pokedex[key] = str(value)
     return JsonResponse({'pokedex': pokedex})
+
+
+
