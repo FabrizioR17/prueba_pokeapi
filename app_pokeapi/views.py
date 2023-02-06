@@ -136,14 +136,19 @@ def pokedex_list(request):
         
     return JsonResponse(response)
 
-def pokemon_by_id(request, pokemon_id):
+def pokemon_by_id_name(request, pokemon_identifier):
     client = MongoClient('mongodb://localhost:27017/')
     db = client['pokeapi_co_db']
     collection = db['pokemon_v2_pokemon']
-    pokemon = collection.find_one({'id': int(pokemon_id)})
+    
+    try:
+        pokemon_id = int(pokemon_identifier)
+        pokemon = collection.find_one({'id': pokemon_id})
+    except ValueError:
+        pokemon = collection.find_one({'name': pokemon_identifier})
     
     if pokemon is None:
-        return JsonResponse({'error': f'No se encuentra el Pokemon con el id {pokemon_id}'})
+        return JsonResponse({'error': f'No se encuentra el Pokemon con el identificador {pokemon_identifier}'})
     
     for key, value in pokemon.items():
         if isinstance(value, ObjectId):
