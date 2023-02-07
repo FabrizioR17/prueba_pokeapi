@@ -35,12 +35,13 @@
 #         data['next'] = f'http://127.0.0.1:8000/api/v2/pokemon/?page={pokemons.next_page_number()}'
     
 #     return JsonResponse(data)
-
+from django.shortcuts import render
 from bson.objectid import ObjectId
 import json
 from pymongo import MongoClient
 from django.http import JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+import uuid
 
 def pokemon_list(request):
     client = MongoClient('mongodb://localhost:27017/')
@@ -173,3 +174,32 @@ def pokedex_by_id_name(request, pokedex_identifier):
         if isinstance(value, ObjectId):
             pokedex[key] = str(value)
     return JsonResponse({'pokedex': pokedex})
+
+
+def register(request):
+    client = MongoClient("mongodb://localhost:27017/")
+    db = client["pokeapi_co_db"]
+    collection = db["app_pokeapi_user"]
+
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        username = data.get('username')
+        password = data.get('password')
+        email = data.get('email')
+
+        if username and password and email:
+            if collection.find_one({'username': username}):
+                return JsonResponse({'error': 'Username already exists'})
+            else:
+                unique_id = str(uuid.uuid4())
+                collection.insert_one({
+                    '_id': unique_id,
+                    'username': username,
+                    'password': password,
+                    'email': email
+                })
+                return JsonResponse({'message': 'User registered successfully'})
+        else:
+            return JsonResponse({'error': 'Please provide all required fields'})
+    else:
+        return JsonResponse({'error': 'Invalid request method'})
