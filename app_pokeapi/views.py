@@ -43,6 +43,11 @@ from django.http import JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import uuid
 
+from django.contrib.auth.models import User
+from rest_framework import generics, permissions
+from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+
 def pokemon_list(request):
     client = MongoClient('mongodb://localhost:27017/')
     db = client['pokeapi_co_db']
@@ -176,6 +181,7 @@ def pokedex_by_id_name(request, pokedex_identifier):
     return JsonResponse({'pokedex': pokedex})
 
 
+<<<<<<< HEAD
 def register(request):
     client = MongoClient("mongodb://localhost:27017/")
     db = client["pokeapi_co_db"]
@@ -203,3 +209,6 @@ def register(request):
             return JsonResponse({'error': 'Please provide all required fields'})
     else:
         return JsonResponse({'error': 'Invalid request method'})
+=======
+
+>>>>>>> main
