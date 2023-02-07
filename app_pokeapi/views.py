@@ -181,7 +181,6 @@ def pokedex_by_id_name(request, pokedex_identifier):
     return JsonResponse({'pokedex': pokedex})
 
 
-<<<<<<< HEAD
 def register(request):
     client = MongoClient("mongodb://localhost:27017/")
     db = client["pokeapi_co_db"]
@@ -209,6 +208,3 @@ def register(request):
             return JsonResponse({'error': 'Please provide all required fields'})
     else:
         return JsonResponse({'error': 'Invalid request method'})
-=======
-
->>>>>>> main
